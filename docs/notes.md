@@ -196,3 +196,119 @@ export default function Home() {
 ```
 
 ---
+
+## Component Layout
+
+Podemos criar componentes que irão conter o layout base da nossa aplicação, como por exemplo um componente chamado Layout que contenha o componente Cabecalho e Rodape, e receba via props o componente que ele envolver. Ex: Layout.jsx e stylishWithLayout.jsx
+
+```jsx
+import Link from "next/link";
+import styles from "../styles/Layout.module.css";
+import CabecalhoProps from "./CabecalhoProps"
+
+export default function Layout(props) {
+    return (
+        <div className={styles.layout}>
+            <div className={styles.cabecalho}>
+                <CabecalhoProps top={props.title ?? "Mais um Componente"}/>
+                <Link href="/">Voltar</Link>
+            </div>
+            <div className={styles.conteudo}>
+                {props.children}
+            </div>
+        </div>
+    );
+}
+```
+
+```jsx
+import Layout from '../components/Layout';
+
+export default function StylishWithLayout() {
+
+    return (
+        <Layout title="Top👌">
+            <div>
+                <h1>Component stylishWithLayout</h1>
+            </div>
+        </Layout>
+    );
+
+}
+```
+
+Com isso chegamos em um nível de reutilização de código muito interessante e de brinde padronizamoso layout base da nossa aplicação.
+
+---
+
+## Component Navegador
+
+Também além de criar um component layout, podemos criar um component responsavel pela navegação nas rotas da aplicação. Também relembrar que podemos usar CSS inline e até mesmo passar props para eles. Ex Navegador.jsx e index.jsx
+
+```jsx
+import Link from "next/link";
+import styles from "../styles/Navegador.module.css";
+
+export default function Navegador(props) {
+    return (
+        <div className={styles.navegador} style={{
+            backgroundColor: props.corBtn ?? 'dodgerblue'
+        }}>
+            <Link href={props.rota}>
+                {props.nomeRota}
+            </Link>
+        </div>
+    );
+}
+```
+```jsx
+import Navegador from '../components/Navegador';
+
+export default function Home() {
+    return (
+        <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: "100vh"
+        }}>
+            <Navegador rota="/helloNext" nomeRota="Olá Next" corBtn="#e20799"/>
+            <Navegador rota="/jsx" nomeRota="JSX" corBtn="#810f55"/>
+            <Navegador rota="/stylishWithLayout" nomeRota="Estilizando" corBtn="#3b0f81" />
+            <Navegador rota="/usingComponentsWithProps" nomeRota="Hello Props"/>
+        </div>
+    );
+}
+```
+
+Com isso assim como o component Layout, temos um reaproveitamento de código, pois passamos as rotas dinâmicamente via props.
+
+---
+
+## Navegação Simples
+
+Não necessáriamente precisamos criar arquivos em pages para referencialos no href do nosso componente Navegador, podemos criar pastas dentro de pages, e nelas criar um arquivo index.jsx, e passar somente o nome da pasta que ele encontrara o caminho normalmente. Ex na pasta pages/navegacao/index.jsx
+
+```jsx
+import Layout from "../../components/Layout";
+
+export default function Navegacao() {
+    return(
+        <Layout title="Exemplo Navegação #01">
+            <h1>Navegação #01</h1>
+        </Layout>
+    );
+}
+```
+```jsx
+import Navegador from '../components/Navegador';
+
+export default function Home() {
+    return (
+        <div>
+            <Navegador rota="/navegacao" nomeRota="Ex Navegação #01"/>
+        </div>
+    );
+}
+```
+
