@@ -1,11 +1,11 @@
 .navegador {
     padding: 20px;
     margin: 10px;
-    font-size: 28px;
+    font-size: 18px;
     border-radius: 5px;
     cursor: pointer;
 }
 
 .navegador a {
-    padding: 20px 60px;
+    padding: 10px 30px;
 }

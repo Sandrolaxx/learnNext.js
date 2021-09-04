@@ -312,3 +312,30 @@ export default function Home() {
 }
 ```
 
+---
+
+## Navegação Dinâmica(Query Params)
+
+Podemos criar rotas personalizadas, muito utilizadas quando queremos acessar algum conteúdo em específico, como exemplo "idUsuario/conta", para criamos essa funcionalidade no next, podemos criar pastas ou arquivps com "nomes dinâmicos", onde essas recebem o valor informado na rota, assim criando rotas dinâmicas e assim podendo informar query params. Para criar a pasta ou arquivo com nome dinâmico basta envolver o nome em colchetes, tal nome será atribuido ao query param, ex: [idUser].jsx ou caso pasta [idUser].
+
+Para usar os query params da rota utilizamos um hook do next, o useRouter, como no exemplo abaixo: user/[sessionId]/[userCode].jsx
+
+```jsx
+import Layout from "../../../components/Layout";
+import {useRouter } from "next/router";
+
+export default function UserByCode() {
+    const router = useRouter();
+
+    return (
+        <Layout title="Navegação Dinâmica">
+            <div>SessionId = {router.query.sessionId}</div>
+            <div>Code = {router.query.userCode}</div>
+        </Layout>    
+    );
+}
+```
+
+---
+
+

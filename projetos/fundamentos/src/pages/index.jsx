@@ -13,6 +13,7 @@ export default function Home() {
             <Navegador rota="/stylishWithLayout" nomeRota="Estilizando" corBtn="#3b0f81" />
             <Navegador rota="/usingComponentsWithProps" nomeRota="Hello Props"/>
             <Navegador rota="/navegacao" nomeRota="Ex Navegação #01"/>
+            <Navegador rota="/user/3/47" nomeRota="Ex Navegação #02"/>
         </div>
     );
 }
