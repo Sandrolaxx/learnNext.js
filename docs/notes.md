@@ -287,7 +287,7 @@ Com isso assim como o component Layout, temos um reaproveitamento de código, po
 
 ## Navegação Simples
 
-Não necessáriamente precisamos criar arquivos em pages para referencialos no href do nosso componente Navegador, podemos criar pastas dentro de pages, e nelas criar um arquivo index.jsx, e passar somente o nome da pasta que ele encontrara o caminho normalmente. Ex na pasta pages/navegacao/index.jsx
+Não necessariamente precisamos criar arquivos em pages para referenciá-los no href do nosso componente Navegador, podemos criar pastas dentro de pages, e nelas criar um arquivo index.jsx, e passar somente o nome da pasta que ele encontrara o caminho normalmente. Ex na pasta pages/navegacao/index.jsx
 
 ```jsx
 import Layout from "../../components/Layout";
@@ -316,7 +316,7 @@ export default function Home() {
 
 ## Navegação Dinâmica(Query Params)
 
-Podemos criar rotas personalizadas, muito utilizadas quando queremos acessar algum conteúdo em específico, como exemplo "idUsuario/conta", para criamos essa funcionalidade no next, podemos criar pastas ou arquivps com "nomes dinâmicos", onde essas recebem o valor informado na rota, assim criando rotas dinâmicas e assim podendo informar query params. Para criar a pasta ou arquivo com nome dinâmico basta envolver o nome em colchetes, tal nome será atribuido ao query param, ex: [idUser].jsx ou caso pasta [idUser].
+Podemos criar rotas personalizadas, muito utilizadas quando queremos acessar algum conteúdo em específico, como exemplo "idUsuario/conta", para criamos essa funcionalidade no next, podemos criar pastas ou arquivos com "nomes dinâmicos", onde essas recebem o valor informado na rota, assim criando rotas dinâmicas e assim podendo informar query params. Para criar a pasta ou arquivo com nome dinâmico basta envolver o nome em colchetes, tal nome será atribuído ao query param, ex: [idUser].jsx ou caso pasta [idUser].
 
 Para usar os query params da rota utilizamos um hook do next, o useRouter, como no exemplo abaixo: user/[sessionId]/[userCode].jsx
 
@@ -338,4 +338,209 @@ export default function UserByCode() {
 
 ---
 
+## Componentes Com Estados
 
+No next/react não podemos trocar o valor de algo em tela sem realizara mudança do seu estado na tela, pois cada componente tem um ciclo de vida próprio, então para conseguir mudar o elemento na tela precisamos alterar seu estado e o modo de fazer isso no react é por meio de react hooks, que são funções do react que nos auxiliam a trabalhar com os componentes, o hook que nos ajuda a alterar estados é o useState, que básicamente é um array com o valor do componente que vamos alterar e uma funcão que fará a alteração, a função do useState é: 
+
+```jsx
+function useState<S>(initialState: S | (() => S))
+```
+
+Abaixo temos um exemplo da utilização do useState:
+
+```jsx
+import { useState } from "react";
+import Layout from "../components/Layout";
+
+export default function Estado() {
+    const state = useState(0);
+
+    let numero = state[0];
+    let alterarNumero = state[1];
+
+    function incrementar() {
+        alterarNumero(numero + 1);
+    }
+
+    return (
+        <Layout title="Componente com Estado">
+            <h1>{numero}</h1>
+            <button onClick={incrementar}>Incrementar</button>
+        </Layout>
+    );
+
+}
+```
+
+No exemplo acima instanciamos a const state sendo igual ao useState recebendo um initialState de valor 0, após isso setamos que a let numero é igual ao initialState, e a função alterarNumero é a responsável por alterar o numero, poderiamos simplificar todas essas alteração com destructuring que é a atribuição via desestruturação. Ex na pasta pages/estado.jsx:
+
+```jsx
+import { useState } from "react";
+import Layout from "../components/Layout";
+
+export default function Estado() {
+    const [numero, setNumero] = useState(0);
+
+    function incrementar() {
+        setNumero(numero + 1);
+    }
+
+    return (
+        <Layout title="Componente com Estado">
+            <h1>{numero}</h1>
+            <button onClick={incrementar}>Incrementar</button>
+        </Layout>
+    );
+
+}
+```
+
+---
+
+## Utilizando a API do Next
+
+Podemos utilizar a API do next para pequenos processamentos e retorno de informações simples, não sendo voltado para construir o back-end da aplicação, no exemplo abaixo temos um simples end-point da api: pages/api/hello.js
+```js
+export default function handler(req, res) {
+  res.status(200).json({ 
+      name: 'Test API', 
+      httpMethod: req.method  
+    })
+}
+```
+
+Para criar rotas com query params podemos utilizar a mesma ideia da navegação dinâmica da aplicação, com aquele mesmo modelo de nomeamento de pastas e arquivos, como no exemplo abaixo: pages/api/[userId]/account.js
+```js
+export default function handler(req, res) {
+
+    if (req.method === "GET") {
+        getUserAccount(req, res);
+    } else {
+        res.status(405).send();
+    }
+
+}
+
+function getUserAccount(req, res) {
+    res.status(200).json({ 
+        id: req.query.userId,
+        name: "Sandrolax", 
+        email:"sandrolax@hotmail.com"   
+    })
+}
+```
+
+Exemplo de retorno passando no query param: http://localhost:3000/api/3/account
+```json
+{
+  "id": "3",
+  "name": "Sandrolax",
+  "email": "sandrolax@hotmail.com"
+}
+```
+
+---
+
+## Integração com a API Next
+
+Podemos a partir da nossa aplicação realizar chamadas na API do Next, isso se da de um modo muito simples, basta realizar a chamada assíncrona para os end-points e alterar o estado dos componentes em tela para conseguir ver o resultado das chamadas, podendo utilizar blibliotecas de http client como axios, ou o padrão fetch dos navegadores, como no exemplo abaixo: pages/integracao_01.jsx 
+```jsx
+import { useState } from "react";
+import Layout from "../components/Layout";
+
+export default function Integracao() {
+    
+    const [code, setCode] = useState(1);
+    const [userData, setUserData] = useState({});
+    
+    async function getUserData() {
+        const resp = await fetch(`http://localhost:3000/api/${code}/account`);
+        const respData = await resp.json();
+        setUserData(respData);
+    }
+
+    return (
+        <Layout title="Integração API Next #01">
+            <div>
+                <input type="number" value={code} onChange={e => setCode(e.target.value)} />
+                <button onClick={getUserData} >Obter Dados da Conta</button>
+            </div>
+            <ul>
+                <li>Id: {userData.id}</li>
+                <li>Nome: {userData.name}</li>
+                <li>E-mail: {userData.email}</li>
+            </ul>
+        </Layout>
+    );
+}
+```
+
+## SSR x SSG x SPA
+
+O next nos permite renderizar os conteúdos da nossa aplicação de três formas:
+
+**SPA**: O modelo comum de renderização do react é no client-side, onde todos os recursos da página vão ser criados pelo js no navegador do cliente, isso é chamados de SPA(Single Page Aplication) ou Client Side Rendering.
+<br/>**SSR**: A renderização no servidor(Server Side Rendering), básicamente a cada requisição do cliente ao servidor ele cria dinamicamente o conteúdo da página. 
+<br/>**SSG**: A geração de estáticos(Static Site Generation), no momento do build da aplicação ele cria todo o HTML e damais conteúdos estáticos uma única vez, e a cada request do cliente ele sempre serve o mesmo conteúdo para todos os clientes, o next nos permite até configurar de quanto em quanto tempo esse conteúdo deve ser regerado.
+
+---
+
+## Geração Estática na Prática(SSG)
+
+Para conseguirmos criar um conteúdo de renderização estática usamos a função getStaticProps no mesmo arquivo, ela retorna props utilizada pelo componente principal, essas props são o conteúdo estático da página/componente, essa função também pode ser async, de tal modo que o conteúdo estático pode ser adquirido externamente via chamada Http. Exemplo: pages/staticRender.jsx
+```jsx
+import Layout from "../components/Layout";
+
+export function getStaticProps() {
+
+    return {
+        props: {
+            staticNumber: Math.random().toFixed(2),
+        },
+    }
+}
+
+export default function staticRendering(props) {
+
+    return(
+        <Layout title="Reenderização Estática">
+            <h1>Número Gerado de Forma Estática: {props.staticNumber}</h1>
+        </Layout>
+    );
+
+}
+```
+
+Lembrando que o conteúdo estático é gerado no build do projeto, ou seja para vermos o conteúdo estático temos de fazer o build e executar a aplicação em produção, como nos comandos abaixo:
+```
+yarn run build
+yarn start
+```
+
+---
+
+## Geração no Servidor na Prática(SSR)
+
+Para conseguirmos criar um conteúdo de renderização do lado do servidor usamos a função getServerSideProps no mesmo arquivo, ela retorna props utilizada pelo componente principal, ao contrário do último exemplo a cada requisição o servidor irá criar o conteúdo novamente, essa função também pode ser async, de tal modo que o conteúdo pode ser adquirido externamente via chamada Http. Exemplo: pages/serverSideRender.jsx
+```jsx
+import Layout from "../components/Layout";
+
+export function getServerSideProps() {
+
+    return {
+        props: {
+            staticNumber: Math.random().toFixed(2),
+        },
+    }
+}
+
+export default function serverSideRender(props) {
+
+    return(
+        <Layout title="Reenderização no Servidor(SSR)">
+            <h1>Número Gerado no Servidor(SSR): {props.staticNumber}</h1>
+        </Layout>
+    );
+
+}
+```
