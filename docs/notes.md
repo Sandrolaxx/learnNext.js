@@ -1,4 +1,4 @@
-# Estudando NextJS
+# Estudando NextJS - Projeto Fundamentos
 
 ## Estrutura de Pastas
 
