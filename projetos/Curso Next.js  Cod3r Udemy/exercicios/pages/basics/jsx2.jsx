@@ -1,4 +1,4 @@
-export default function Jsx2() {
+export default function jsx2() {
     const arrayExemple = [
         <li>Clebim</li>,
         <li>Jão</li>,

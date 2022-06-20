@@ -1,4 +1,4 @@
-export default function Jsx1() {
+export default function jsx1() {
     return (
         <h1>
             Exemplo JSX
