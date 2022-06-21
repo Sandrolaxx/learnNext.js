@@ -217,3 +217,58 @@ export default function integration02() {
 Vemos que a utilização do CSS é um pouco diferente do convencional onde não importamos somente o arquivo CSS e utilizamos os nomes das classes e etc. Aqui é necessário importar o arquivo como um objeto e utilizar suas propriedades.
 
 ---
+
+## Renderizando lista de elementos
+
+No React é possível renderizar uma lista de elementos criando uma lista de elementos JSX e retornando essa lista em uma função, um pegando uma lista de elementos e realizando um map nesses elementos e transformando em JSX, como no exemplo abaixo:
+
+```jsx
+export default function repetition01() {
+    const listaAprovados = [
+        "Clebér",
+        "Sandrolax",
+        "Gavriellix",
+        "Osmar"
+    ]
+
+    return(
+        <ul>
+            {
+                listaAprovados.map((element, i) => (
+                    <li key={i}>{element}</li>
+                ))
+            }
+        </ul>
+    );
+}
+```
+
+O mesmo tratamento podemos realizar com objetos:
+```jsx
+import listaProdutos from "../../data/listaProdutos";
+
+export default function repetition02() {
+    return (
+        <div>
+            <table style={{border: "1px solid #000" }}>
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Nome</th>
+                        <th>Preço</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {listaProdutos.map(produto => (
+                        <tr key={produto.id}>
+                            <td style={{border: "1px solid #000" }}>{produto.id}</td>
+                            <td style={{border: "1px solid #000" }}>{produto.nome}</td>
+                            <td style={{border: "1px solid #000" }}>{produto.preco}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    );
+}
+```

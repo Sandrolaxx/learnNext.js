@@ -1,0 +1,15 @@
+.container {
+    height: 100vh;
+    display: grid;
+    grid-template-columns: repeat(8, 132px);
+    justify-content: center;
+    padding: 4%;
+}
+
+.elementsBlack {
+    background-color: black;
+}
+
+.elementsWhite {
+    background-color: white;
+}
