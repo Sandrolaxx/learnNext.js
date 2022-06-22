@@ -1,6 +1,6 @@
-# Conceitos Básicos
+# Conceitos Básicos React⚛️
 
-### JSX
+## JSX
 
 Criado pela equipe de desenvolvimento do React, o JSX é uma forma de criar elementos para serem utilizadas como templates de aplicações React. Basicamente, os elementos criados com o JSX são bem similares com código HTML e fornecem aos desenvolvedores uma forma mais simples e intuitiva de criar os componentes de uma aplicação.
 
@@ -25,11 +25,11 @@ export default function exempleJSX() {
 
 ---
 
-### Fragment
+## Fragment
 
 Não é possível retornar multiplos elementos "solto" sem que outro elemento os envolva, caso tente retornar multiplos elementos isso acarretara em erros de build por parte do React.
 
-**Exemplo de componente incorreto:**
+Exemplo de componente incorreto:
 ```js
 export default function componenteIncorreto() {
     return (
@@ -41,11 +41,11 @@ export default function componenteIncorreto() {
 
 Isso ocorre por conta de que implementação do React depende da construção de uma estrutura tipo árvore que ele usa para reconciliação. Quando retornado diversos elementos no método de renderização a árvore não terá um nó raiz, assim dificultando o processamento do algoritmo de reconciliação.
 
-**Doc do algoritimo:** https://reactjs.org/docs/reconciliation.html
+**Doc do algoritimo👉** https://reactjs.org/docs/reconciliation.html
 
 A solução mais adotada pela comunidade é a de utilizar o fragment, este que até resolve um problema na construção de componentes Coluna para tabelas, uma vez que retornando o componente de coluna em uma ```<div>``` quando o componente fosse colocado em uma tabela, esta ficaria incorreta.
 
-**Exemplo do componente Coluna:**
+Exemplo do componente Coluna:
 ```js
 export function Coluna() {
     return (
@@ -57,7 +57,7 @@ export function Coluna() {
 }
 ```
 
-**Quando utilizado em uma tabela:**
+Quando utilizado em uma tabela:
 
 ```js
 <table>
@@ -74,7 +74,7 @@ Utilizando a tag fragment ```<></>``` o componente Coluna não teria uma ```<div
 
 ---
 
-### JS Modules
+## JS Modules
 
 Com js modules podemos componentizar nosso front-end e assim ter uma ótima reutilização de código. O NodeJs possui o [require](https://nodejs.org/en/knowledge/getting-started/what-is-require/) que é o seu sistema de modularização, porém não estamos utilizando as funcionalidades do Node e sim o JS Vanilla onde para utilizarmos sua modularização utilizamos o ```export default function``` não sendo explicitamente necessário utilizar o default, visto que o default apenas denota que aquela função ou variável é a padrão daquele determinado arquivo.
 
@@ -91,7 +91,7 @@ export default function Title() {
 
 Você pode exportar funções, var, let, const, e até classes. Eles precisam ser itens de nível superior; você não pode usar a exportação dentro de uma função.
 
-**Importando o recurso criado:**
+Importando o recurso criado:
 ```jsx
 import Title from "../../components/Title"
 
@@ -99,11 +99,11 @@ export default function usingModule() {
     return <Title/>
 }
 ```
-**Doc MDN sobre:** https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Guide/Modules
+**Doc MDN sobre👉** https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Guide/Modules
 
 ---
 
-### Props
+## Props
 
 Não é muito interessante criar um componente Title que retorna um conteúdo estático, poderíamos passar o valor dinamicamente ao componente para que ele renderiza-se o que foi passado, conseguimos fazer isso com "Props" que é o nome dado no mundo React para esse conceito de passar propriedades para o componente.
 
@@ -134,11 +134,46 @@ export default function Props() {
 
 **E lembrando que Props são apenas leitura!** As funções que recebem props devem ser [puras](https://dev.to/silvaemerson/funcoes-puras-3mg).
 
-Doc Oficial do React sobre: https://pt-br.reactjs.org/docs/components-and-props.html#gatsby-focus-wrapper
+**Doc Oficial do React sobre👉**  https://pt-br.reactjs.org/docs/components-and-props.html#gatsby-focus-wrapper
 
 ---
 
-### CSS
+## Elementos filhos
+
+Podemos criar componentes que recebem outros componentes, estes que são seus filhos, acessando a propriedade **children** de props podemos acessar esses elementos que foram definidos no componente pai, como no exemplo abaixo:
+
+```jsx
+export default function List(props) {
+    return (
+        <div>
+            <h2>Lista de elementos filhos:</h2>
+            <ul>
+                {props.children}
+            </ul>
+        </div>
+    );
+}
+```
+
+Utilizando componente List:
+```jsx
+import List from "../../components/List";
+
+export default function childrenElements() {
+    return (
+        <List>
+            <li>Elemento #01</li>
+            <li>Elemento #02</li>
+            <li>Elemento #03</li>
+            <li>Elemento #04</li>
+        </List>
+    )
+}
+```
+
+---
+
+## CSS
 
 A estilização no React é bem simples basta criar o componente e adicionar o nome das classes criados no arquivo css, como no exemplo abaixo:
 
@@ -272,3 +307,79 @@ export default function repetition02() {
     );
 }
 ```
+---
+
+## Renderização condicional
+
+A renderização condicional em React funciona da mesma forma que as condições em JavaScript. Podemos utilizar o operador ```if``` ou ```operadores ternários``` para definir quais os elementos vão ser apresentados na tela, como nos exemplos abaixo:
+
+```jsx
+export default function OnlyEven(props) {
+    if (props.number % 2 === 0) {
+        return <h1>Número {props.number} é Par!</h1>
+    } else {
+        return null;
+    }
+}
+```
+
+Utilizando componente:
+```jsx
+import OnlyEven from "../../components/OnlyEven";
+
+export default function conditional01() {
+    return (
+        <div>
+            <OnlyEven number={12} />
+            <OnlyEven number={11} />
+        </div>
+    );
+}
+```
+
+Aqui somente números Par seriam renderizados em tela, teriamos o mesmo resultado com operadores ternários:
+
+```jsx
+export default function OnlyEven(props) {
+    const isEvenNumber = props.number % 2 === 0;
+    
+    return isEvenNumber ? <h1>Número {props.number} é Par!</h1> : null;
+}
+```
+
+Outra ideia é utilzar o recurso do props.children e criar um componente "If" que renderiza o componente filho de acordo com a condição passada, exemplo:
+```jsx
+export default function If(props) {
+    if (props.condition === true) {
+        return props.children;
+    } else {
+        return false;
+    }
+}
+```
+
+Utilizando o componente If
+```jsx
+import If from "../../components/If";
+
+export default function conditional02() {
+    const firstNumber = 4;
+    const secondNumber = 5;
+    
+    return (
+        <div>
+            <If condition={firstNumber % 2 === 0} >
+                <p>O número {firstNumber} é Par!</p>
+            </If>
+            <If condition={secondNumber % 2 === 1} >
+                <p>O número {secondNumber} é Ímpar!</p>
+            </If>
+        </div>
+    );
+}
+```
+
+**Doc Oficial do React sobre👉** https://pt-br.reactjs.org/docs/conditional-rendering.html
+
+---
+
