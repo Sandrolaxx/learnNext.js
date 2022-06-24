@@ -14,3 +14,17 @@ a {
 * {
   box-sizing: border-box;
 }
+
+button {
+    margin: 8px;
+}
+
+.default {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #222;
+    align-items: center;
+    color: #fff;
+}

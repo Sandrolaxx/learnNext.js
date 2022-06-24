@@ -41,9 +41,9 @@ export default function componenteIncorreto() {
 
 Isso ocorre por conta de que implementação do React depende da construção de uma estrutura tipo árvore que ele usa para reconciliação. Quando retornado diversos elementos no método de renderização a árvore não terá um nó raiz, assim dificultando o processamento do algoritmo de reconciliação.
 
-**Doc do algoritimo👉** https://reactjs.org/docs/reconciliation.html
+**Doc do ALGORITIMO DE RECONCILIAÇÃO👉** https://reactjs.org/docs/reconciliation.html
 
-A solução mais adotada pela comunidade é a de utilizar o fragment, este que até resolve um problema na construção de componentes Coluna para tabelas, uma vez que retornando o componente de coluna em uma ```<div>``` quando o componente fosse colocado em uma tabela, esta ficaria incorreta.
+A solução mais adotada pela comunidade é a de utilizar o fragment, este que até resolve um problema na construção de componentes Coluna para tabelas, uma vez que retornando o componente de coluna em uma `<div>` quando o componente fosse colocado em uma tabela, esta ficaria incorreta.
 
 Exemplo do componente Coluna:
 ```js
@@ -70,13 +70,13 @@ Quando utilizado em uma tabela:
 </table>
 ```
 
-Utilizando a tag fragment ```<></>``` o componente Coluna não teria uma ```<div>``` e assim ficaria correto na tabela.
+Utilizando a tag fragment `<></>` o componente Coluna não teria uma `<div>` e assim ficaria correto na tabela.
 
 ---
 
-## JS Modules
+## JS Modules📂
 
-Com js modules podemos componentizar nosso front-end e assim ter uma ótima reutilização de código. O NodeJs possui o [require](https://nodejs.org/en/knowledge/getting-started/what-is-require/) que é o seu sistema de modularização, porém não estamos utilizando as funcionalidades do Node e sim o JS Vanilla onde para utilizarmos sua modularização utilizamos o ```export default function``` não sendo explicitamente necessário utilizar o default, visto que o default apenas denota que aquela função ou variável é a padrão daquele determinado arquivo.
+Com js modules podemos componentizar nosso front-end e assim ter uma ótima reutilização de código. O NodeJs possui o [require](https://nodejs.org/en/knowledge/getting-started/what-is-require/) que é o seu sistema de modularização, porém não estamos utilizando as funcionalidades do Node e sim o JS Vanilla onde para utilizarmos sua modularização utilizamos o `export default function` não sendo explicitamente necessário utilizar o default, visto que o default apenas denota que aquela função ou variável é a padrão daquele determinado arquivo.
 
 **Exemplo de variável/função sendo exportada:**
 ```jsx
@@ -138,7 +138,7 @@ export default function Props() {
 
 ---
 
-## Elementos filhos
+## Elementos filhos👶
 
 Podemos criar componentes que recebem outros componentes, estes que são seus filhos, acessando a propriedade **children** de props podemos acessar esses elementos que foram definidos no componente pai, como no exemplo abaixo:
 
@@ -173,7 +173,7 @@ export default function childrenElements() {
 
 ---
 
-## CSS
+## CSS🦄
 
 A estilização no React é bem simples basta criar o componente e adicionar o nome das classes criados no arquivo css, como no exemplo abaixo:
 
@@ -214,7 +214,7 @@ Vimos que é possível chamar o arquivo css no escopo do componente, porém isso
 
 O [CSS Modules](https://github.com/css-modules/css-modules) não é algo específico do Next, se trata de uma biblioteca para modularizar o CSS, tal lib que o Next já implementa por padrão.
 
-A utilização é bem simples, basta seguir a convenção de nomenclatura ```[name].module.css``` como no exemplo abaixo:
+A utilização é bem simples, basta seguir a convenção de nomenclatura `[name].module.css` como no exemplo abaixo:
 
 Arquivo integration02.module.css:
 ```css
@@ -253,7 +253,7 @@ Vemos que a utilização do CSS é um pouco diferente do convencional onde não 
 
 ---
 
-## Renderizando lista de elementos
+## Renderizando lista de elementos👯‍♀️
 
 No React é possível renderizar uma lista de elementos criando uma lista de elementos JSX e retornando essa lista em uma função, um pegando uma lista de elementos e realizando um map nesses elementos e transformando em JSX, como no exemplo abaixo:
 
@@ -309,9 +309,9 @@ export default function repetition02() {
 ```
 ---
 
-## Renderização condicional
+## Renderização condicional❌ ✅
 
-A renderização condicional em React funciona da mesma forma que as condições em JavaScript. Podemos utilizar o operador ```if``` ou ```operadores ternários``` para definir quais os elementos vão ser apresentados na tela, como nos exemplos abaixo:
+A renderização condicional em React funciona da mesma forma que as condições em JavaScript. Podemos utilizar o operador `if` ou `operadores ternários` para definir quais os elementos vão ser apresentados na tela, como nos exemplos abaixo:
 
 ```jsx
 export default function OnlyEven(props) {
@@ -383,3 +383,335 @@ export default function conditional02() {
 
 ---
 
+## Chamada de Função em Evento🏌🏻
+
+Podemos chamar funções em qualquer um dos [eventos do browser](https://developer.mozilla.org/pt-BR/docs/Web/Events) isso é muito útil para pegar informações de Input's ou realizar uma ação ao clicar em um botão.
+
+Exemplo de chamada de função em evento:
+```jsx
+export default function handleFunctions() {
+    function getInputProps(event) {
+        console.log("Valor do Input:".concat(event.target.value));
+    }
+
+    function handleLogClick() {
+        console.log("Fui clicado🤯!");
+    }
+    
+    return (
+        <div>
+            <button onClick={handleLogClick} >Clique aqui!</button>
+            <button onClick={() => console.log("Works like")} >Arrow Function</button>
+            <div>
+                <span>Input</span>
+                <input onChange={getInputProps} />
+            </div>
+        </div>
+    );
+}
+```
+---
+
+## Alterando estado dos componentes🧘‍♂️
+
+Utilizamos o "state" de um componenete para armazenar dados que, quando alterados, **devem causar uma nova renderização**, por exemplo:
+
+```jsx
+export default function states() {
+    const xAxis = 0;
+    const yAxis = 0;
+
+    function handleChangeAxis(event) {
+        xAxis = event.pageX;
+        yAxis = event.pageY;
+    }
+
+    return (
+        <div style={style} onMouseMove={e => handleChangeAxis(e)} >
+            <h1>Eixo X: {xAxis}</h1>
+            <h1>Eixo Y: {yAxis}</h1>
+        </div>
+    )
+}
+```
+Esse nosso exemplo acima, diferentemente do JS Vanilla, **não iriá ser alterado nenhum valor em tela**, pois os componentes do React possuem um [ciclo de vida](https://pt-br.reactjs.org/docs/state-and-lifecycle.html) que após criados podemos definir alguns estados dentro deles, no exemplo abaixo o usuário ao realizar o evento de mover o mouse e o elemento com o estado é renderizado novamente e assim atualizando o valor na tela.
+
+Componente com estados:
+```jsx
+import { useState } from "react"
+
+export default function states() {
+    const [xAxis, setXaxis] = useState(0);
+    const [yAxis, setYaxis] = useState(0);
+
+    function handleChangeAxis(event) {
+        setXaxis(event.pageX);
+        setYaxis(event.pageY);
+    }
+
+    return (
+        <div style={style} onMouseMove={e => handleChangeAxis(e)} >
+            <h1>Eixo X: {xAxis}</h1>
+            <h1>Eixo Y: {yAxis}</h1>
+        </div>
+    )
+}
+```
+
+No exemplo acima usamos o hook `useState` para manipularmos o estado de das nossas variáveis exibidas em tela, abordaremos `hooks's` em "Conceitos avançados". **LEMBRANDO** que nem toda informação visual que muda deve ficar no estado, o estado deve conter o mínimo necessário para conseguirmos derivar o estado visual do componente, o tamanho do state dos componentes React afeta diretamente o desempenho do **ALGORITIMO DE RECONCILIAÇÃO**, por isso é importante minimizar o tamanho do state.
+
+---
+
+# Conceitos avançados
+
+## Comunicação - Direta➡️
+
+Vimos anteriormente que podemos passar propriedades do componente Pai para os componentes Filhos é muito simples, basta passar props entre eles, como no exemplo a seguir:
+
+Componente filho:
+```jsx
+export default function Son(props) {
+    return (
+        <div>
+            <p>{props.name} - {props.family}</p>
+        </div>
+    )
+}
+```
+
+Componente pai:
+```jsx
+import Son from "./Son";
+
+export default function Father(props) {
+    return (
+        <div>
+            <Son name="Sandrolax" family={props.family} />
+            <Son name="João" family={props.family} />
+            <Son {...props} name="Nathália" />
+        </div>
+    )
+}
+```
+
+```jsx
+import Father from "../../components/direct/Father";
+
+export default function direct() {
+    return (
+        <div>
+            <h1>Direta</h1>
+            <Father family="Ramos" name="default" />
+        </div>
+    )
+}
+```
+
+**VALE ATENTAR QUE** o uso de [Spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax) é necessário respeitar a ordem de definição das variáveis, onde se o `{...props}` for utilizado após definições diretas de propriedades ele as sobrescreveria, por exemplo:
+
+```jsx
+    <Son name="Nathália" {...props} />
+```
+
+Se quem tivesse instanciado o componente tivesse definido um nome a propriedade definida no próprio componente seria sobrescrita, sempre valendo a última definição, ou seja, para evitar esse tipo de situação sempre usar a Spread syntax no começo da definição de propriedades do componente.
+
+---
+
+## Comunicação Indireta🔄
+
+Utilizada em cenários onde precisamos passar informações e realizar a comunicação do componente Filho para o componente Pai, o modo de fazer isso se da por funcões, onde o componente Pai define uma função e o componente Filho realiza a chamada dessa função e nela pode passar parametros ou não, exemplo:
+
+Componente Filho:
+```jsx
+export default function Son(props) {
+    
+    function talkWithFather() {
+        console.log("Vou falar com meu pai.🙏");
+
+        props.talk("E ai pai suave?😎");
+    }
+    
+    return (
+        <div>
+            <button onClick={talkWithFather}>Falar com Father</button>
+        </div>
+    )
+}
+```
+
+Componente Pai:
+```jsx
+import Son from "./Son";
+
+export default function Father() {
+    
+    function talking(sonResponse) {
+        console.log("E ai filhão!");
+
+        console.log(sonResponse);
+    }
+    
+    return (
+        <div>
+            <Son talk={talking} />
+        </div>
+    )
+}
+```
+
+Utilizando componente Father:
+```jsx
+import Father from "../../components/indirect01/Father";
+
+export default function indirect01() {
+    return (
+        <div>
+            <h1>Indireta</h1>
+            <Father />
+        </div>
+    )
+}
+```
+
+Log da chamada da função:
+```
+Vou falar com meu pai.🙏
+E ai filhão!
+E ai pai suave?😎
+```
+
+---
+
+## Componentes Controlados e Não Controlados🧟
+
+Quando for necessário trabalhar principalmente com formulários ou Input's será necessário vincular um estado para cada campo definido, visto que utilizando o React e definindo um estado ao [Componente Controlando](https://pt-br.reactjs.org/docs/forms.html#controlled-components) não
+é possível que alteremos o valor sem alterar o estado do mesmo, como no exemplo abaixo:
+
+Componente Controlado:
+```jsx
+import { useState } from "react";
+
+export default function form() {
+    const [value, setValue] = useState("Impossível Alterar o Valor do Input");
+
+    return (
+        <div className="default">
+            <h1>Formulário</h1>
+            <input type="text" value={value} />
+        </div>
+    );
+}
+```
+
+Exemplo acima mesmo clicando no Input e tentando digitar novos valores o mesmo será alterado, por conta de ser um componente "Controlado" e que a alteração em tela se dá pela alteração do estado do componente que reflete então na atualização da tela, até retornado um Warning "You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`." basicamente nos dizendo que precisamos chamar a função de set do valor no evento de onChange ou definir o campo como apenas leitura.
+
+[Componentes Não Controlados](https://pt-br.reactjs.org/docs/uncontrolled-components.html) por sua vez possuem o comportamento padrão do ES5, o que seria o componente caso não tivesse nenhuma interração do React.**O componente apenas será editável/Não Controlado caso o useState tenha sido definido acidentalmente como null ou undefined**.
+
+---
+
+## Class Components🤷
+
+Até o momento sempre trabalhamos com [functional components](https://www.geeksforgeeks.org/reactjs-functional-components/) por ser a maneira mais atual e convencional de criar componentes no React, porém antes da versão 16.8 de 6 de fevereiro de 2019 não era possível manipular states em componentes funcionais, somente em componentes de classe, também era necessário gerenciar todo o ciclo de vida dos [Class Components](https://www.w3schools.com/react/react_class.asp). É muito mais verboso que os componentes funcionais e o uso de hooks não é possível, sendo necessário utilizar a referência `this` da classe para poder ter acesso a state e props para poder manipulá-los, abaixo temos a implementação do componente contador utilizando Class Components:
+
+```jsx
+import { Component } from "react";
+
+export default class ClassCounter extends Component {
+
+    state = {
+        iteratedValue: 0,
+        counterIn: this.props.counterIn ?? 1
+    }
+
+    increment = () => {
+        this.setState({ iteratedValue: this.state.iteratedValue + this.state.counterIn });
+    }
+
+    decrement = () => {
+        this.setState({ iteratedValue: this.state.iteratedValue - this.state.counterIn });
+    }
+
+    render() {
+        return (
+            <div className="default">
+                <h1>Contador😸</h1>
+                <h4>Incrementando de {this.state.counterIn} em {this.state.counterIn}</h4>
+                <div style={{ display: "flex", flexDirection: "row" }}>
+                    <button onClick={this.decrement}>-</button>
+                    <h3>Valor: {this.state.iteratedValue}</h3>
+                    <button onClick={this.increment}>+</button>
+                </div>
+            </div>
+        )
+    }
+}
+```
+
+Utilizando o componente:
+```jsx
+import { Component } from "react";
+import ClassCounter from "../../components/ClassCounter";
+
+export default class classComponent extends Component {
+    render() {
+        return (
+            <div style={{display: "flex", justifyContent:"space-around"}}>
+                <ClassCounter counterIn={5} />
+                <ClassCounter />
+            </div>
+        )
+    }
+}
+```
+
+---
+
+## Integrando TypesCript🙏
+
+Podemos integrar o superset de JS o [TypesCript](https://www.typescriptlang.org/) de uma maneira muito simples, basta criarmos um arquivo chamado tsconfig.json na raiz do projeto, ao tentar subir o projeto novamente não vai mais ser possível, ele vai requerer que adicionemos as lib's do TS como dev dependencies, que são elas:
+```
+yarn add --dev typescript @types/react @types/node
+``` 
+
+Após subir a aplicação já podemos criar nosso primeiro componente .tsx:
+```ts
+interface componentProps {
+    name: string;
+    idade: number;
+}
+
+export default function TsComponent(props: componentProps) {
+    return(
+        <div>
+            <h4>Nome: {props.name}</h4>
+            <h4>Nome: {props.idade ?? 'Não informada'}</h4>
+        </div>
+    );
+}
+```
+
+Utilizando componente com tipagem:
+```ts
+import TsComponent from "../../components/TsComponent";
+
+export default function exempleTS() {
+    return (
+        <div>
+            <TsComponent name="Sandrolax" idade={23} />
+            <TsComponent name="Gabriellix" />
+        </div>
+    )
+}
+```
+
+---
+
+## ContextAPI
+
+Learning About after
+
+---
+
+## React Hooks
+
+Learning About after
