@@ -708,7 +708,66 @@ export default function exempleTS() {
 
 ## ContextAPI
 
-Learning About after
+Podemos criar props globais para nossa aplicação e acessá-lo que qualquer componente, isso é útil para evitar ficar passando props entre componentes múltiplas vezes até que ela chegue em nosso componente de destino, não ficar perfurando toda a aplicação([Prop-drilling](https://ordinarycoders.com/blog/article/react-prop-drilling-passing-props)) e ele é muito utilizado para tema UI global, idioma de aplicação, se o usuário está logado e etc. Para criar o [Contexto](https://pt-br.reactjs.org/docs/context.html#reactcreatecontext) é necessário criar um arquivo como no exemplo abaixo:
+
+Componente de contexto:
+```jsx
+import React from "react";
+import { useState } from "react";
+
+const AuthContext = React.createContext();
+
+export default function AuthProvider(props) {
+    const [data, setData] = useState({ name: "Sandrolax" });
+
+    return (
+        <AuthContext.Provider value={{data, setData}}>
+            {props.children}
+        </AuthContext.Provider>
+    );
+}
+
+export function useAuth() {
+    return React.useContext(AuthContext);
+}
+```
+
+Acima estamos criando o contexto e adicionando a ele o objeto data e sua respectiva função de alteração utilizando o hook useState.
+
+Outro passo **IMPORTANTE** é envolver o componente raiz do projeto com o contexto para que seja possível acessar o contexto em toda a aplicação.
+
+Componente raiz, utilizando componente de contexto:
+```jsx
+import "../styles/globals.css";
+import AuthProvider from "../providers/auth";
+
+export default function MyApp({ Component, pageProps }) {
+    return (
+        <AuthProvider>
+            <Component {...pageProps} />
+        </AuthProvider>
+    )
+}
+```
+
+Após iss podemos utilizar as propriedades de contexto em qualquer lugar da aplicação, como por exemplo:
+
+```jsx
+import { useAuth } from "../../providers/auth"
+
+export default function usingContext() {
+    const { data, setData } = useAuth();
+
+    return(
+        <div className="default">
+            <h1>Nome presente no contexto: {data.name}</h1>
+            <hr />
+            <h4>Insira um nome para modificar a variavél do contexto:</h4>
+            <input type="text" onChange={e => setData({name: e.target.value})} />
+        </div>
+    )
+}
+```
 
 ---
 
