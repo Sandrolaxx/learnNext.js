@@ -787,3 +787,36 @@ Apenas chame Hooks de componentes funcionais ou dentro dos seus próprios Hooks 
 |  --  |       --       |
 | useState | Utilizado para definir um state a uma propriedade e re-renderizar o mesmo quando atualizado. |
 | useEffect | Utilizado para manipular o ciclo de vida do componente. |
+| useContext | Utilizado para criar o contexto a criar propriedades globais|
+| useReducer | Similar ao useState e é geralmente preferível em relação ao useState quando se tem uma lógica de estado complexa que envolve múltiplos sub-valores, ou quando o próximo estado depende do estado anterior. useReducer também possibilita a otimização da performance de componentes que disparam atualizações profundas porque é possível passar o dispatch para baixo, ao invés de callbacks.|
+| useCallback | Retorna uma versão memoizada do callback que só muda se uma das entradas tiverem sido alteradas. Isto é útil quando utilizamos callbacks a fim de otimizar componentes filhos, que dependem da igualdade de referência para evitar renderizações desnecessárias.|
+| useMemo | Recebe uma função e seus valores de entrada e [memoiza](https://en.wikipedia.org/wiki/Memoization) ela.|
+| useRef | Retorna um objeto ref mutável onde o .current é inicializado com o valor inicialmente passado e tal obbjeto persistirá durante todo o ciclo de vida do componente.|
+| useImperativeHandle | Personaliza o valor da instância que está exposta aos componentes pai ao usar ref. Como sempre, na maioria dos casos, seria bom evitar um código imperativo usando refs. O useImperativeHandle deve ser usado com [forwardRef](https://pt-br.reactjs.org/docs/react-api.html#reactforwardref)|
+
+Você também pode criar Hook's personalizados, de tal forma que você extraia a lógica de um componente em funções reutilizáveis, exemplo:
+
+```jsx
+export function useUserStatus(userID) {
+  const [status, setStatus] = useState(null);
+
+  //Lógica para verificar status
+
+  return status;
+}
+```
+
+Utilizando hook criado:
+```jsx
+function userStatus(props) {
+  const isOnline = useUserStatus(props.user.id);
+
+  if (isOnline === null) {
+    return 'Loading...';
+  }
+
+  return isOnline ? 'Online' : 'Offline';
+}
+```
+
+Poderíamos criar hook's personalizados mais complexo e exportar diversas propriedades neles e utilizar [desestructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) para pegar somente o que necessitarmos utilizar dependendo de cada situação.
