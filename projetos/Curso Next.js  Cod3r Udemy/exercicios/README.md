@@ -773,4 +773,17 @@ export default function usingContext() {
 
 ## React Hooks
 
-Learning About after
+Eles foram criados para permitir a utilização de state e outros recursos do React sem ter de escrever um componente de classe, ou seja, criados para trazer todas as funcionalidades do React aos componentes funcionais, com eles podemos utilizar estados, manipular ciclo de vida e etc assim como nos componentes de classe. Os principais hook's utilizados são o useState para manipulação do estado de propriedades do componente, useEffect para manipular o ciclo de vida e useContext para utilizar a ContextAPI.
+
+⚠️ Regras de utilização
+
+Apenas chame Hooks no nível mais alto. Não chame Hooks dentro de loops, condições ou funções aninhadas.
+
+Apenas chame Hooks de componentes funcionais ou dentro dos seus próprios Hooks customizados. Não chame Hooks de funções JavaScript comuns.
+
+**Lista de Hook's:**
+
+| Nome | Funcionalidade |
+|  --  |       --       |
+| useState | Utilizado para definir um state a uma propriedade e re-renderizar o mesmo quando atualizado. |
+| useEffect | Utilizado para manipular o ciclo de vida do componente. |
