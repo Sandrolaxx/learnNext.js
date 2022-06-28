@@ -2,5 +2,5 @@
 
 export default function sayHi(req, res) {
   res.status(200)
-    .json({ word: "Hi!" });
+    .json({ metodo: req.method });
 }

@@ -88,3 +88,170 @@ export default function params() {
     )
 }
 ```
+
+---
+
+## Navegando com Componente Link
+
+Podemos utilizar o componente [link](https://nextjs.org/docs/api-reference/next/link) do próprio next para realizar uma navegação entre as rotas, similar ao que é realizado pela tag [\<a>](https://developer.mozilla.org/pt-BR/docs/Web/HTML/Element/a) do html, onde passamos a rota de destino no atributo `href`, exemplo de utilização:
+```jsx
+import Link from "next/link";
+
+export default function rotas() {
+    return (
+        <div className="default">
+            Rotas index
+            <ul>
+                <li>
+                    <Link href="/routes/params?name=Sandrolax&age=23">
+                        Params
+                    </Link>
+                </li>
+                <li>
+                    <Link href="/">
+                        Home
+                    </Link>
+                </li>
+            </ul>
+        </div>
+    )
+}
+```
+
+---
+
+## Navegando com Hook useRouter
+
+Podemos navegar entre as rotas de maneira similar ao componente link utilizando o próprio useRouter, a vantagem aqui é que podemos fazer isso de maneira programática, realizando a navegação, por exemplo, em funções, exemplo:
+
+```jsx
+import { useRouter } from "next/router"
+
+export default function navWithRouter() {
+    const router = useRouter();
+
+    function simpleNav(url) {
+        router.push(url);
+    }
+
+    function paramsNav() {
+        router.push({
+            pathname: "/routes/params",
+            query: {
+                age: 23,
+                name: "Sandrolax"
+            }
+        });
+    }
+
+    return (
+        <div className="default">
+            Rotas index
+            <hr />
+            <button onClick={paramsNav} >
+                Params
+            </button>
+            <hr />
+            <button onClick={() => simpleNav("/")} >
+                Home
+            </button>
+        </div>
+    )
+}
+```
+
+---
+
+## API
+
+A [API Routes](https://nextjs.org/docs/api-routes/introduction) prove uma solução de API embarcada com o next, qualquer arquivo no diretório `page/api` é tratado com um endpoint e servido como o mesmo. Um exemplo de endpoint é o arquivo `pages/api/hello.js` que retorna um json e um status code 200:
+```js
+export default function sayHi(req, res) {
+  res.status(200)
+    .json({ word: "Hi!" });
+}
+```
+
+Para que a API funcione corretamente é necessária uma função que receba dois parâmetros `req` e `res`, onde req(request) possui os dados da requesição que está sendo recebida, como headers, query params, http method, já o res(response) vão conter as informações de resposta da requisição.
+
+Podemos ler todos os [valores](https://nodejs.org/api/http.html#class-httpincomingmessage) da request, muito utilizado para receber params no endpoint, exemplo:
+```jsx
+export default function sayHi(req, res) {
+  res.status(200)
+    .json({ metodo: req.method });
+}
+```
+
+---
+
+## API - Endpoint Dinâmico
+
+Nossa rotas [Dinâmicas](https://nextjs.org/docs/api-routes/dynamic-api-routes) segue, a mesma lógica de nomes utilizados em `pages` por exemplo `pages/api/question/[id].js`:
+```js
+export default function question(req, res) {
+    if (req.method === "GET") {
+        const id = req.query.id;
+
+        res.status(200).json({
+            id,
+            enunciado: "Qual sua cor favorita?",
+            respostas: [
+                "Purple", "Yellow", "Green", "Blue"
+            ]
+        });
+    } else {
+        res.status(405).send();
+    }
+}
+```
+
+**Podemos também** criar um slug para poder receber inúmeros parâmetros, para criá-lo basta seguir o seguinte padrão de nomenclatura no nome do arquivo `[...dados].js`, caso esse arquivo estivesse na pasta `pages/api/user/` poderíamos passar qualquer parâmetro após user, assim eliminando a necessidade de criar diversas pastas dinâmicas para cadas parâmetro que desejarmos receber. No exemplo anterior de slug caso não passemos ao menos um parâmetro a rota não seria encontrada, para termos parâmetros opcionais, basta seguir a seguinte nomenclaturara `[[...dados]].js` adicionando esse colchete a mais agora nossa rota pode receber ou não parâmetros, evitando o status code 404 na rota.
+
+---
+
+## API - Consumindo Endpoint
+
+Como temos um "back-end" disponível em nossa aplicação, podemos criar um componente jsx/tsx e realizar uma chamada para nossa API e consumir os dados servidos por ela, exemplo:
+
+Componente consumindo o endpoint `/pages/api/question/[id].js`:
+```jsx
+import { useEffect, useState } from "react"
+
+export default function question() {
+    const [response, setResponse] = useState(null);
+    const url = "http://localhost:3000/api/question/47"
+
+    useEffect(() => fetchQuestion, []);
+
+    function fetchQuestion() {
+        fetch(url)
+            .then(res => res.json())
+            .then(json => setResponse(json));
+    }
+
+    return (
+        <div className="default">
+            <h1>Questões</h1>
+            {response ?
+                <>
+                    <h4>Questão {response.id}</h4>
+                    <p>{response.enunciado}</p>
+                    <ul>
+                        {response.respostas.map(res => (
+                            <li key={res}>{res}</li>
+                        ))}
+                    </ul>
+                </>
+                :
+                <h4>Não foi possível carregar as questões!😢</h4>
+            }
+        </div>
+    )
+}
+```
+
+---
+
+# Conceitos avançados
+
+## Estratégias de Renderização - Estática

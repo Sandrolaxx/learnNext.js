@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 
-export default function search() {
+export default function Search() {
     const router = useRouter();
 
     return(
