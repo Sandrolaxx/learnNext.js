@@ -6,12 +6,12 @@ export default function rotas() {
             Rotas index
             <ul>
                 <li>
-                    <Link href="/routes/params?name=Sandrolax&age=23">
+                    <Link href="/routes/params?name=Sandrolax&age=23" passHref>
                         Params
                     </Link>
                 </li>
                 <li>
-                    <Link href="/">
+                    <Link href="/" passHref>
                         Home
                     </Link>
                 </li>

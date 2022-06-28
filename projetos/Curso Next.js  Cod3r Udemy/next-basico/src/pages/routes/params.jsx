@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 
-export default function params() {
+export default function Params() {
     const router = useRouter();
 
     return(
