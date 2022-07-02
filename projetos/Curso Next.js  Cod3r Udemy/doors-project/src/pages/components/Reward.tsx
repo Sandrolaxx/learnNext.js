@@ -1,4 +1,4 @@
-import styles from "../Reward/Reward.module.css"
+import styles from "../../styles/Reward.module.css"
 
 export default function Reward() {
     return (

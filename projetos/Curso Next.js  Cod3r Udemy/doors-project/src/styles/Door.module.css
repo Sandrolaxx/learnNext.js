@@ -10,10 +10,12 @@
 .doorFrame {
     display: flex;
     flex-grow: 1;
+    flex-direction: column-reverse;
     width: 92%;
     border-left: 5px solid #01886b;
     border-right: 5px solid #01886b;
     border-top: 5px solid #01886b;
+    background: #0005;
 }
 
 .door {

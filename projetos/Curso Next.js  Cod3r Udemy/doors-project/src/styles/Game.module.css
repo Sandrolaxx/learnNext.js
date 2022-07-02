@@ -1,0 +1,29 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.doors {
+    display: flex;
+    align-self: stretch;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 56px;
+}
+
+.buttons button {
+    background-color: #df1818;
+    color: #f1f1f1;
+    padding: 10px 25px;
+    font-size: 1.5rem;
+    border: none;
+    border-radius: 12px;
+}
