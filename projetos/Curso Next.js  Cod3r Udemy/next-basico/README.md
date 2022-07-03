@@ -252,6 +252,33 @@ export default function question() {
 
 ---
 
-# Conceitos avançados
+# Conceitos avançados - Estratégias de Renderização
 
-## Estratégias de Renderização - Estática
+## Client Side Rendering - CSR ou SPA
+
+Uma aplicação de página única se refere a aplicações onde todo o conteúdo irá ser criado dinamicamente com JS do lado do cliente(browser), onde o client side realiza uma chamada para o servidor ele responde com o todo HTML e JS da aplicação, o HTML além do header e etc, em seu body possui apenas uma TAG root e o resto dos elementos será criado pelo JS que irá manipular a [DOM](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model) para fazer isso. Porém essa abordagem impacta muito no [SEO](https://www.tecmundo.com.br/blog/2770-o-que-e-seo-.htm). 
+
+**Conteúdo sobre👉** https://coodesh.com/blog/dicionario/o-que-e-spa/
+
+Exemplo do funcionamento de um SPA:
+![SPA](https://user-images.githubusercontent.com/61207420/177042821-8bfe9dec-440f-4011-bf16-ea305519bfa4.png)
+
+---
+
+## Server Side Rendering - SSR
+
+Diferentemente do SPA a cada requisição tido o conteúdo da página é gerado do lado do servidor e então disponibilizado ao cliente, a vantagem disso é por exemplo uma otimização no SEO.
+
+![Funcionamento SSR](https://miro.medium.com/max/700/1*XHuB099rg_R8XzEV3WdCVw.png)
+
+O fluxo que podemos verificar abaixo é:
+- Foi realizada uma requisição buscando o conteúdo da página e o servidor retornou todo o conteúdo da página o HTML e CSS
+- Então o Browser renderiza a página e baixa o JS.
+- Browser executa o JS do React que "hidrata" a DOM, isso não chega a alterar os componentes da DOM gerados pelo servidor.
+- As alterações que o React prove executando do lado do cliente são apenas de integibilidade, por exemplo: clicks handlers e outros eventos de interação.
+
+---
+
+## Server Side Generation - SSG
+
+A geração estática de conteúdo do lado do servidor, como o nome já bem diz, se refere a conteúdos previamente gerados na compilação pelo Next.js que são disponibilizados a cada chamada pelo servidor, sempre os mesmos conteúdos, porém mesmo sendo um conteúdo estático é possível realizar chamadas esternas e etc. O Next.js nos possibilita determinar quanto tempo essa compilação deve ocorrer para assim gerar conteúdo novo, por exemplo: cada 24 horas, 1 hora ou 30 min.
