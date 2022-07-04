@@ -263,6 +263,38 @@ Uma aplicação de página única se refere a aplicações onde todo o conteúdo
 Exemplo do funcionamento de um SPA:
 ![SPA](https://user-images.githubusercontent.com/61207420/177042821-8bfe9dec-440f-4011-bf16-ea305519bfa4.png)
 
+Quando criamos uma aplicação com Next utilizando somente features do React nosso build é gerado respeitando tais elementos que constituem o CSR.
+
+Um abaixo temos um exemplo de arquivo de SPA:
+```jsx
+import { useState } from "react";
+
+export default function counter() {
+    const [value, setValue] = useState(0);
+
+    function increment() {
+        setValue(value + 1);
+    }
+
+    function decrement() {
+        setValue(value - 1);
+    }
+
+    return (
+        <div className="default">
+            <h1>Contador😸</h1>
+            <div style={{display: "flex", flexDirection: "row"}}>
+                <button onClick={decrement}>-</button>
+                <h3>Valor: {value}</h3>
+                <button onClick={increment} >+</button>
+            </div>
+        </div>
+    )
+}
+```
+
+Todo esse bloco de código será executado no client side.
+
 ---
 
 ## Server Side Rendering - SSR
@@ -277,8 +309,113 @@ O fluxo que podemos verificar abaixo é:
 - Browser executa o JS do React que "hidrata" a DOM, isso não chega a alterar os componentes da DOM gerados pelo servidor.
 - As alterações que o React prove executando do lado do cliente são apenas de integibilidade, por exemplo: clicks handlers e outros eventos de interação.
 
+Exemplo de um arquivo SSR:
+```jsx
+export async function getServerSideProps() {
+    const resp = await fetch("http://localhost:3000/api/products");
+    const products = await resp.json();
+
+    return {
+        props: {
+            products
+        }
+    }
+}
+
+export default function Static4(props) {
+    return (
+        <div>
+            <h1>Dinâmico - 02</h1>
+            {props.products &&
+                props.products.map(p => (
+                    <ul key={p.id}>
+                        <li>{p.id} - Produto {p.name} com o preço {p.price}</li>
+                    </ul>
+                ))
+            }
+        </div>
+    )
+}
+```
+
+No exemplo acima a cada requisição o servidor cria toda a página e a serve ao cliente.
+
 ---
 
 ## Server Side Generation - SSG
 
 A geração estática de conteúdo do lado do servidor, como o nome já bem diz, se refere a conteúdos previamente gerados na compilação pelo Next.js que são disponibilizados a cada chamada pelo servidor, sempre os mesmos conteúdos, porém mesmo sendo um conteúdo estático é possível realizar chamadas esternas e etc. O Next.js nos possibilita determinar quanto tempo essa compilação deve ocorrer para assim gerar conteúdo novo, por exemplo: cada 24 horas, 1 hora ou 30 min.
+
+Exemplo de arquivo SSG:
+```jsx
+export function getStaticProps() {
+    return {
+        revalidate: 7,//Propriedade para que o conteúdo seja regerado a cada 7 segundos
+        props: {
+            number: Math.random()
+        }
+    }
+}
+
+export default function Static3(props) {
+    return (
+        <div>
+            <h1>Estático - 03</h1>//Gerado de forma estática por padrão
+            <h2>{props.number}</h2>//Gerado de forma estática e regeradoa cada 7 segundos
+        </div>
+    )
+}
+```
+
+**E NO CASO DE PATHS DINÂMICOS?**
+
+Também podemos criar páginas estáticas para paths dinâmicos, para isso temos de definir os paths que serão pré-criados no build e definir se a cada request para paths não mapeados se deve ter um fallback que retorna 404 caso false ou se deve tentar criar o conteúdo para aquele parâmetro informado e então realizar o cache deste no servidor.
+
+Por exemplo:
+```jsx
+export async function getStaticPaths() {
+    const resp = await fetch("http://localhost:3000/api/students/tutors");
+    const ids = await resp.json();
+
+    const paths = ids.map(id => (
+        { params: { id: id.toString() } })
+    );
+
+    return {
+        fallback: true,//true ele tenta gerar a página com os parâmetros informados e false retorna 404 caso não seja um id mapeado
+        paths
+    }
+}
+
+export async function getStaticProps(context) {//Se refere aos dados de quem o chamou, no caso 3 vezes o getStaticPaths, uma vez para cada página
+    const resp = await fetch(`http://localhost:3000/api/students/${context.params.id}`);
+    const student = await resp.json();
+
+    return {
+        props: {
+            student
+        }
+    }
+}
+
+export default function StudentById(props) {
+    const { student } = props;
+
+    return (
+        <div>
+            <h1>Detalhes do Aluno</h1>
+            {student ?
+                <ul key={student.studentId}>
+                    <h2>Id: {student.studentId}</h2>
+                    <h2>Nome: {student.name}</h2>
+                    <h2>E-mail: {student.email}</h2>
+                </ul>
+                :
+                false
+            }
+        </div>
+    )
+}
+```
+
+O exemplo acima poderia não ser com funções assíncronas.

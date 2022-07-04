@@ -6,7 +6,7 @@ import style from "../../../styles/Game.module.css";
 import { createDoors, handleUptdateDoors } from "../../../utils/util";
 import Door from "../../components/Door";
 
-export default function game() {
+export default function Game() {
     const router = useRouter();
     const [isValid, setValid] = useState(false);
     const [doors, setDoors] = useState<DoorModel[]>();
@@ -23,7 +23,7 @@ export default function game() {
             setValid(validDoorsQuantity && validRewardDoor);
         }
 
-    }, [doors]);
+    }, [doors, router.query]);
 
     useEffect(() => {
         const doorsQuantity = router.query.props ? Number.parseInt(router.query.props[0]) : null;

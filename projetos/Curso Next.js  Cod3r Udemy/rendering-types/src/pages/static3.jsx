@@ -10,7 +10,7 @@ export function getStaticProps() {
 export default function Static3(props) {
     return (
         <div>
-            <h1>Estático - #03 </h1>{/*Gerado de forma estática por padrão*/}
+            <h1>Estático - 03</h1>{/*Gerado de forma estática por padrão*/}
             <h2>{props.number}</h2>{/*Gerado de forma estática regerado a cada 7 segundos*/}
         </div>
     )

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import DoorModel from "../../model/DoorModel";
 import styles from "../../styles/Door.module.css";
 import Reward from "./Reward";
@@ -8,7 +9,9 @@ interface DoorProps {
 }
 
 export default function Door({ door, onChange }: DoorProps) {
-    const isSelected = door.isSelected() && !door.isOpen() ? styles.selected : false;
+    const [isSelected, setSelected] = useState("");
+
+    useEffect(() => setSelected(door.isSelected() && !door.isOpen() ? styles.selected : ""), [door]);
 
     function alterSelection() {
         onChange(door.alterSelection());
@@ -23,16 +26,19 @@ export default function Door({ door, onChange }: DoorProps) {
     return (
         <div className={styles.container} onClick={alterSelection}>
             <div className={`${styles.doorFrame} ${isSelected}`}>
-                {door.isOpen() ?
-                    door.isHasReward() ?
-                        <Reward />
+                {door ?
+                    door.isOpen() ?
+                        door.isHasReward() ?
+                            <Reward />
+                            :
+                            false
                         :
-                        false
+                        <div className={styles.door}>
+                            <div className={styles.number}>{door.getNumber()}</div>
+                            <div className={styles.knob} onClick={event => openDoor(event)} ></div>
+                        </div>
                     :
-                    <div className={styles.door}>
-                        <div className={styles.number}>{door.getNumber()}</div>
-                        <div className={styles.knob} onClick={event => openDoor(event)} ></div>
-                    </div>
+                    false
                 }
             </div>
             <div className={styles.ground}></div>
