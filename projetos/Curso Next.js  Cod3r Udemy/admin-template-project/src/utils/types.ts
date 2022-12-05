@@ -19,7 +19,9 @@ export interface ContentProps {
 }
 
 export interface MenuItemProps {
-    url: string;
     text: string;
     icon: any;
+    url?: string;
+    className?: string;
+    onClick?: (event: any) => void;
 }

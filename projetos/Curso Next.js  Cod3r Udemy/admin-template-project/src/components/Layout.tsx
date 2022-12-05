@@ -5,7 +5,7 @@ import LateralMenu from "./LateralMenu";
 
 export default function Layout(props: LayoutProps) {
     return (
-        <div className="dark flex w-screen h-screen">
+        <div className="flex w-screen h-screen">
             <LateralMenu />
             <div className="flex flex-col w-full p-7 bg-gray-300 dark:bg-black">
                 <Header title={props.title} subTitle={props.subTitle} />
