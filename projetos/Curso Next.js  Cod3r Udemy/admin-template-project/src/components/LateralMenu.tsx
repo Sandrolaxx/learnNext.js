@@ -5,8 +5,8 @@ import MenuItem from "./ManuItem";
 
 export default function LateralMenu() {
     return (
-        <aside className="flex flex-col">
-            <div className="w-20 h-20 flex justify-center items-center">
+        <aside className="flex flex-col dark:bg-gray-900 dark:text-gray-200">
+            <div className="w-24 h-20 flex justify-center items-center">
                 <Image src={AktieLogo} alt="Logo AKTIE TECH" width={50} height={80} />
             </div>
             <ul className="flex-grow">
@@ -17,7 +17,8 @@ export default function LateralMenu() {
             <ul>
                 <MenuItem text="Sair" icon={ExitIcon}
                     onClick={() => console.log("Eu sai!!")}
-                    className="text-red-500 hover:bg-red-400 hover:text-white" />
+                    className="text-red-500 hover:bg-red-400 hover:text-white
+                    dark:text-red-400 dark:hover:text-white dark:hover:bg-red-700" />
             </ul>
         </aside>
     )
