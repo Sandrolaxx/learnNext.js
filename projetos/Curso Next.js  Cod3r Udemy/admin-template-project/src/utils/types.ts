@@ -25,3 +25,13 @@ export interface MenuItemProps {
     className?: string;
     onClick?: (event: any) => void;
 }
+
+export interface AppContextProps {
+    theme?: string;
+    alterTheme?: () => void;
+}
+
+export interface AlterThemeBtnProps {
+    theme: string,
+    alterTheme: () => void;
+}
