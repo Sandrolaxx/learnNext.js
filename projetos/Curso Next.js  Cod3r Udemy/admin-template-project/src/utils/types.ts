@@ -35,3 +35,11 @@ export interface AlterThemeBtnProps {
     theme: string,
     alterTheme: () => void;
 }
+
+export interface AuthInputProps {
+    label: string,
+    value: any,
+    required?: boolean,
+    type?: "text" | "email" | "password",
+    changeValue: (newValue: any) => void;
+}
