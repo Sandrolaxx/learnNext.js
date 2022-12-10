@@ -32,14 +32,28 @@ export interface AppContextProps {
 }
 
 export interface AlterThemeBtnProps {
-    theme: string,
+    theme: string;
     alterTheme: () => void;
 }
 
 export interface AuthInputProps {
-    label: string,
-    value: any,
-    required?: boolean,
-    type?: "text" | "email" | "password",
+    label: string;
+    value: any;
+    required?: boolean;
+    type?: "text" | "email" | "password";
     changeValue: (newValue: any) => void;
+}
+
+export interface User {
+    uid: string;
+    email: string | null;
+    name: string | null;
+    token: string;
+    provider: string;
+    imageUrl: string | null;
+}
+
+export interface AuthContextProps {
+    user?: User;
+    handleLoginGoogle?: () => Promise<void>;
 }

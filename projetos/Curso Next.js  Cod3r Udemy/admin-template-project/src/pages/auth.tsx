@@ -1,8 +1,10 @@
 import { useState } from "react";
 import AuthInput from "../components/auth/AuthInput";
 import { AlertIcon, GoogleIcon } from "../components/icons";
+import useAuthContext from "../data/hook/useAuthContext";
 
 export default function Authentication() {
+    const { user, handleLoginGoogle } = useAuthContext();
     const [mode, setMode] = useState<"login" | "cadastro">("login");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -64,7 +66,7 @@ export default function Authentication() {
                     <p className="text-sm">
                         Logar com
                     </p>
-                    <button onClick={handleSubmit} className="hover:bg-indigo-50 w-12 rounded-full mt-2 p-1">
+                    <button onClick={handleLoginGoogle} className="hover:bg-indigo-50 w-12 rounded-full mt-2 p-1">
                         {GoogleIcon(10, 10)}
                     </button>
                 </div>

@@ -1,7 +1,8 @@
 import Image from "next/image";
-import AktieLogo from "../../public/logo.png";
+import AktieLogo from "../../public/images/logo.png";
 import { ExitIcon, HomeIcon, NotificationIcon, SettingsIcon } from "./icons";
 import MenuItem from "./ManuItem";
+import router from "next/router";
 
 export default function LateralMenu() {
     return (
@@ -16,7 +17,7 @@ export default function LateralMenu() {
             </ul>
             <ul>
                 <MenuItem text="Sair" icon={ExitIcon}
-                    onClick={() => console.log("Eu sai!!")}
+                    onClick={() => router.push("/auth")}
                     className="text-red-500 hover:bg-red-400 hover:text-white
                     dark:text-red-400 dark:hover:text-white dark:hover:bg-red-700" />
             </ul>
