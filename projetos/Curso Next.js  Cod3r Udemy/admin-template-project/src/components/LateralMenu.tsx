@@ -1,10 +1,12 @@
 import Image from "next/image";
 import AktieLogo from "../../public/images/logo.png";
+import useAuthContext from "../data/hook/useAuthContext";
 import { ExitIcon, HomeIcon, NotificationIcon, SettingsIcon } from "./icons";
 import MenuItem from "./ManuItem";
-import router from "next/router";
 
 export default function LateralMenu() {
+    const { handleLogout } = useAuthContext();
+
     return (
         <aside className="flex flex-col dark:bg-gray-900 dark:text-gray-200">
             <div className="w-24 h-20 flex justify-center items-center">
@@ -17,7 +19,7 @@ export default function LateralMenu() {
             </ul>
             <ul>
                 <MenuItem text="Sair" icon={ExitIcon}
-                    onClick={() => router.push("/auth")}
+                    onClick={handleLogout}
                     className="text-red-500 hover:bg-red-400 hover:text-white
                     dark:text-red-400 dark:hover:text-white dark:hover:bg-red-700" />
             </ul>
