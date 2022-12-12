@@ -1,4 +1,4 @@
-import fireAuth, { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import fireAuth, { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import cookies from "js-cookie";
 import router from "next/router";
 import { createContext, useEffect, useState } from "react";
@@ -14,13 +14,42 @@ export function AuthProvider(props: any) {
     const auth = getAuth(firebaseApp);
     const provider = new GoogleAuthProvider();
 
+    async function handleLogin(email: string, password: string) {
+        try {
+            setLoading(true);
+
+            const response = await signInWithEmailAndPassword(auth, email, password);
+
+            await configSession(response.user);
+            
+            router.push("/");
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    async function handleRegister(email: string, password: string) {
+        try {
+            setLoading(true);
+
+            const response = await createUserWithEmailAndPassword(auth, email, password);
+
+            await configSession(response.user);
+            
+            router.push("/");
+        } finally {
+            setLoading(false);
+        }
+    }
+
     async function handleLoginGoogle() {
         try {
             setLoading(true);
 
             const response = await signInWithPopup(auth, provider);
 
-            configSession(response.user);
+            await configSession(response.user);
+            
             router.push("/");
         } finally {
             setLoading(false);
@@ -79,7 +108,11 @@ export function AuthProvider(props: any) {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ user, handleLoginGoogle, handleLogout, isLoading }}>
+        <AuthContext.Provider value={{
+            user, isLoading,
+            handleLoginGoogle, handleLogout,
+            handleRegister, handleLogin
+        }}>
             {props.children}
         </AuthContext.Provider>
     )

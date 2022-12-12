@@ -4,7 +4,7 @@ import { AlertIcon, GoogleIcon } from "../components/icons";
 import useAuthContext from "../data/hook/useAuthContext";
 
 export default function Authentication() {
-    const { user, handleLoginGoogle } = useAuthContext();
+    const { handleRegister, handleLogin, handleLoginGoogle } = useAuthContext();
     const [mode, setMode] = useState<"login" | "cadastro">("login");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -16,16 +16,26 @@ export default function Authentication() {
         setTimeout(() => setErroMsg(null), msgExibitionSeconds * 1000);
     }
 
-    function handleSubmit() {
-        if (mode === "login") {
-            console.log("Login");
-            handleShowError("Erro ao realizar login!!");
+    async function handleSubmit() {
+        try {
+            if (mode === "login") {
+                await handleLogin?.(email, password);
 
-            return;
+                return;
+            }
+
+            await handleRegister?.(email, password);
+        } catch (error: any) {
+            handleShowError(error?.code ?? "Erro ao realizar ".concat(mode));
         }
+    }
 
-        handleShowError("Erro ao realizar o cadastro!!");
-        console.log("Cadastrar");
+    async function loginGoogle() {
+        try {
+            await handleLoginGoogle?.();
+        } catch (error: any) {
+            handleShowError(error?.code ?? "Erro ao realizar ".concat(mode));
+        }
     }
 
     return (
@@ -66,7 +76,7 @@ export default function Authentication() {
                     <p className="text-sm">
                         Logar com
                     </p>
-                    <button onClick={handleLoginGoogle} className="hover:bg-indigo-50 w-12 rounded-full mt-2 p-1">
+                    <button onClick={loginGoogle} className="hover:bg-indigo-50 w-12 rounded-full mt-2 p-1">
                         {GoogleIcon(10, 10)}
                     </button>
                 </div>

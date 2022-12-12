@@ -56,6 +56,8 @@ export interface User {
 export interface AuthContextProps {
     user?: User;
     isLoading?: boolean;
+    handleLogin?: (email: string, password: string) => Promise<void>;
+    handleRegister?: (email: string, password: string) => Promise<void>;
     handleLoginGoogle?: () => Promise<void>;
     handleLogout?: () => Promise<void>;
 }
